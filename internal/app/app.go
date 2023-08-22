@@ -1,16 +1,21 @@
 package app
 
 import (
+	"context"
 	"fmt"
 	"net"
 	"net/http"
 	"time"
 
 	"github.com/alexPavlikov/electronic_document_management/internal/config"
+	"github.com/alexPavlikov/electronic_document_management/internal/entity/user"
+	dbClient "github.com/alexPavlikov/electronic_document_management/pkg/client/postgresql"
 	"github.com/alexPavlikov/electronic_document_management/pkg/logging"
 
 	"github.com/julienschmidt/httprouter"
 )
+
+var ClientPostgreSQL dbClient.Client
 
 func Run() {
 	logger := logging.GetLogger()
@@ -19,7 +24,18 @@ func Run() {
 
 	cfg := config.GetConfig()
 
-	//var err error
+	var err error
+
+	ClientPostgreSQL, err = dbClient.NewClient(context.TODO(), cfg.Storage)
+	if err != nil {
+		logger.Fatalf("failed to get new client postgresql, due to err: %v", err)
+	}
+
+	logger.Info(config.LOG_INFO, " - Start users handlers")
+	uRep := user.NewRepository(ClientPostgreSQL, logger)
+	uSer := user.NewService(uRep, logger)
+	uHan := user.NewHandler(uSer, logger)
+	uHan.Register(router)
 
 	start(router, *cfg)
 }

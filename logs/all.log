@@ -2,3 +2,5 @@ time="2023-08-20T15:05:26+03:00" level=info msg="INFO\tCreate router" func="gith
 time="2023-08-20T15:05:26+03:00" level=info msg="INFO\tStart application" func="github.com/alexPavlikov/electronic_document_management/internal/app.start()" file="app.go 29"
 time="2023-08-20T15:05:26+03:00" level=info msg="INFO\tListen TCP" func="github.com/alexPavlikov/electronic_document_management/internal/app.start()" file="app.go 34"
 time="2023-08-20T15:05:26+03:00" level=info msg="INFO\t Server is listen on port: :10000" func="github.com/alexPavlikov/electronic_document_management/internal/app.start()" file="app.go 36"
+time="2023-08-22T21:27:27+03:00" level=info msg="INFO\tCreate router" func="github.com/alexPavlikov/electronic_document_management/internal/app.Run()" file="app.go 22"
+time="2023-08-22T21:27:43+03:00" level=fatal msg="ERROR\terror do with tries postgresql" func="github.com/alexPavlikov/electronic_document_management/pkg/client/postgresql.NewClient()" file="db.go 39"

@@ -3,6 +3,7 @@ package config
 import (
 	"sync"
 
+	"github.com/alexPavlikov/electronic_document_management/pkg/logging"
 	"github.com/ilyakaznacheev/cleanenv"
 )
 
@@ -32,14 +33,14 @@ type StorageConfig struct {
 }
 
 func GetConfig() *Config {
-	//logger := logging.GetLogger()
+	logger := logging.GetLogger()
 	once.Do(func() {
 		cfg = &Config{}
 		err := cleanenv.ReadConfig(PATH, cfg)
 		if err != nil {
-			//help, _ := cleanenv.GetDescription(cfg, nil)
-			//logger.Info(help)
-			//logger.Fatal(help)
+			help, _ := cleanenv.GetDescription(cfg, nil)
+			logger.Info(LOG_INFO, help)
+			logger.Fatal(LOG_ERROR, err)
 		}
 	})
 	return cfg

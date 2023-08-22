@@ -12,10 +12,12 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Montserrat', sans-serif;
+    background-color: rgba(128, 128, 128, 0.2);
 }
 
 header {
-    margin: 0 5% 0 5%;
+    background-color: white;
+    padding: 10px 5% 10px 5%;
     display: flex;
     flex-direction: row;
     min-height: 60px;
@@ -147,7 +149,7 @@ header .box-header-right {
     position: fixed;
     left: 0;
     top: 0;
-    margin-top: 70px;
+    margin-top: 80px;
     /* padding: 20px 0; */
     min-width: 50px;
     width: 5%;
@@ -213,13 +215,16 @@ main {
     margin: 0 5%;
     width: 90%;
     position: relative;
+
 }
 
 .table-sortable {
     width: 100%;
     padding: 0 40px;
     margin-top: 40px;
-    
+    /* sorted
+     max-width: 1000px;
+    overflow-x: scroll; */
 }
 
 .table-sortable th {
@@ -312,4 +317,5 @@ td {
 .sorted form select {
     padding: 10px 20px;
     border: 1px solid rgb(4, 160, 56);
+    min-width: 150px;
 }

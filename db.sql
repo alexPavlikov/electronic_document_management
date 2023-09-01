@@ -1,4 +1,4 @@
-CREATE TABLE "public.User" (
+CREATE TABLE "User" (
 	"id" serial NOT NULL,
 	"email" VARCHAR(255) NOT NULL UNIQUE,
 	"full_name" VARCHAR(255) NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE "public.User" (
 
 
 
-CREATE TABLE "public.Role" (
+CREATE TABLE "Role" (
 	"name" VARCHAR(255) NOT NULL,
 	CONSTRAINT "Role_pk" PRIMARY KEY ("name")
 ) WITH (
@@ -21,7 +21,7 @@ CREATE TABLE "public.Role" (
 
 
 
-CREATE TABLE "public.Request" (
+CREATE TABLE "Request" (
 	"id" serial NOT NULL,
 	"title" VARCHAR(255) NOT NULL,
 	"client" integer NOT NULL,
@@ -42,9 +42,13 @@ CREATE TABLE "public.Request" (
 
 
 
-CREATE TABLE "public.Client" (
+CREATE TABLE "Client" (
 	"id" serial NOT NULL,
 	"name" VARCHAR(255) NOT NULL,
+	"inn"	VARCHAR(255),
+	"kpp" VARCHAR(255),
+	"ogrn" VARCHAR(255),
+	"owner" VARCHAR(255),
 	"phone" VARCHAR(255) NOT NULL,
 	"email" VARCHAR(255) NOT NULL,
 	"address" VARCHAR(255) NOT NULL,
@@ -57,7 +61,7 @@ CREATE TABLE "public.Client" (
 
 
 
-CREATE TABLE "public.Objects" (
+CREATE TABLE "Objects" (
 	"id" serial NOT NULL,
 	"name" VARCHAR(255) NOT NULL,
 	"address" VARCHAR(255) NOT NULL,
@@ -69,7 +73,7 @@ CREATE TABLE "public.Objects" (
 
 
 
-CREATE TABLE "public.Client_objects" (
+CREATE TABLE "Client_objects" (
 	"id" serial NOT NULL,
 	"client" integer NOT NULL,
 	"object" integer NOT NULL,
@@ -80,7 +84,7 @@ CREATE TABLE "public.Client_objects" (
 
 
 
-CREATE TABLE "public.Equipment" (
+CREATE TABLE "Equipment" (
 	"id" serial NOT NULL,
 	"name" VARCHAR(255) NOT NULL,
 	"type" VARCHAR(255) NOT NULL,
@@ -96,7 +100,7 @@ CREATE TABLE "public.Equipment" (
 
 
 
-CREATE TABLE "public.Client_equipment" (
+CREATE TABLE "Client_equipment" (
 	"id" serial NOT NULL,
 	"equipment" integer NOT NULL,
 	"client" integer NOT NULL,
@@ -109,7 +113,7 @@ CREATE TABLE "public.Client_equipment" (
 
 
 
-CREATE TABLE "public.Contract" (
+CREATE TABLE "Contract" (
 	"id" serial NOT NULL,
 	"name" VARCHAR(255) NOT NULL,
 	"client" integer NOT NULL,
@@ -125,7 +129,7 @@ CREATE TABLE "public.Contract" (
 
 
 
-CREATE TABLE "public.Request_priority" (
+CREATE TABLE "Request_priority" (
 	"name" VARCHAR(255) NOT NULL,
 	CONSTRAINT "Request_priority_pk" PRIMARY KEY ("name")
 ) WITH (
@@ -134,8 +138,9 @@ CREATE TABLE "public.Request_priority" (
 
 
 
-CREATE TABLE "public.Request_status" (
+CREATE TABLE "Request_status" (
 	"name" VARCHAR(255) NOT NULL,
+	"color" VARCHAR(255) NOT NULL,
 	CONSTRAINT "Request_status_pk" PRIMARY KEY ("name")
 ) WITH (
   OIDS=FALSE
@@ -143,7 +148,7 @@ CREATE TABLE "public.Request_status" (
 
 
 
-CREATE TABLE "public.Services" (
+CREATE TABLE "Services" (
 	"id" serial NOT NULL,
 	"equipment" integer NOT NULL,
 	"type" VARCHAR(255) NOT NULL,
@@ -155,7 +160,7 @@ CREATE TABLE "public.Services" (
 
 
 
-CREATE TABLE "public.Services_type" (
+CREATE TABLE "Services_type" (
 	"name" VARCHAR(255) NOT NULL,
 	CONSTRAINT "Services_type_pk" PRIMARY KEY ("name")
 ) WITH (

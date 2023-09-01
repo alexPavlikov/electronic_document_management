@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/alexPavlikov/electronic_document_management/internal/config"
-	"github.com/alexPavlikov/electronic_document_management/internal/entity/user"
+	"github.com/alexPavlikov/electronic_document_management/internal/entity/requests"
 	dbClient "github.com/alexPavlikov/electronic_document_management/pkg/client/postgresql"
 	"github.com/alexPavlikov/electronic_document_management/pkg/logging"
 
@@ -31,11 +31,11 @@ func Run() {
 		logger.Fatalf("failed to get new client postgresql, due to err: %v", err)
 	}
 
-	logger.Info(config.LOG_INFO, " - Start users handlers")
-	uRep := user.NewRepository(ClientPostgreSQL, logger)
-	uSer := user.NewService(uRep, logger)
-	uHan := user.NewHandler(uSer, logger)
-	uHan.Register(router)
+	logger.Info(config.LOG_INFO, " - Start requests handlers")
+	rRep := requests.NewRepository(ClientPostgreSQL, logger)
+	rSer := requests.NewService(rRep, logger)
+	rHan := requests.NewHandler(rSer, logger)
+	rHan.Register(router)
 
 	start(router, *cfg)
 }

@@ -1,6 +1,7 @@
 package requests
 
 import (
+	"context"
 	"net/http"
 	"text/template"
 
@@ -17,9 +18,9 @@ type handler struct {
 
 func (h *handler) Register(router *httprouter.Router) {
 
-	router.ServeFiles("/assets/*filepath", http.Dir("assets"))
+	//router.ServeFiles("/assets/*filepath", http.Dir("assets"))
 
-	router.HandlerFunc(http.MethodGet, "/edm/requests", h.RequestsHandler)
+	router.HandlerFunc(http.MethodGet, "/edm/request", h.RequestsHandler)
 }
 
 func NewHandler(service *Service, logger *logging.Logger) handlers.Handlers {
@@ -36,13 +37,19 @@ func (h *handler) RequestsHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 	}
 
-	data := map[string]interface{}{}
-	header := map[string]string{"Title": "ЭДМ - Заявки"}
+	reqs, err := h.service.GetRequests(context.TODO())
+	if err != nil {
+		h.logger.Errorf("%s - failed load RequestsHandler due to err: %s", config.LOG_ERROR, err)
+		http.NotFound(w, r)
+	}
+
+	data := map[string]interface{}{"Requests": reqs}
+	header := map[string]string{"Title": "ЭДО - Заявки"}
 
 	err = tmpl.ExecuteTemplate(w, "header", header)
 	if err != nil {
 		h.logger.Tracef("%s - failed open RequestsHandler", config.LOG_ERROR)
-		w.WriteHeader(http.StatusNotFound)
+		http.NotFound(w, r)
 	}
 
 	err = tmpl.ExecuteTemplate(w, "request", data)

@@ -143,8 +143,10 @@
     <form action="/edm/" class="content"  autocomplete="off">
         <div class="content-col" style="width: 60%; padding: 0 20px;">
             <div class="title">
-                <span>Тема заявки</span>
-                <input type="text" name="title" id="" placeholder="Тема">
+                    <div class="sub-title" style="width: 97%;"><span>Заголовок заявки</span><a class="text-btn primary" style="padding: 0;" onclick="window.dialogtype.showModal();">Создать</a></div>
+                    <select name="type" id="">
+                        <option value="1">hello</option>
+                    </select>
             </div>
             <div class="class">
                 <div class="type">
@@ -210,7 +212,7 @@
                 <input type="date">
             </div>
         </div>
-        <button class="main-btn add">Создать</button>
+        <button class="main-btn adds">Создать</button>
     </form>
 
 	<button onclick="window.dialog.close();" aria-label="close" class="x">❌</button>

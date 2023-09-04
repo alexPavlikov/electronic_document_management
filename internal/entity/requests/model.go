@@ -1,13 +1,13 @@
 package requests
 
 type Request struct {
-	Id           string
+	Id           int
 	Title        string
 	Description  string
 	Priority     string
 	StartDate    string
 	EndDate      string
-	Files        string
+	Files        []string
 	Client       interface{}
 	Worker       interface{}
 	ClientObject interface{}

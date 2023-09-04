@@ -1,6 +1,8 @@
 package client
 
 import (
+	"context"
+	"fmt"
 	"net/http"
 	"text/template"
 
@@ -19,7 +21,7 @@ func (h *handler) Register(router *httprouter.Router) {
 
 	router.ServeFiles("/assets/*filepath", http.Dir("assets"))
 
-	router.HandlerFunc(http.MethodGet, "/edm/requests", h.RequestsHandler)
+	router.HandlerFunc(http.MethodGet, "/edm/client", h.ClientHandler)
 }
 
 func NewHandler(service *Service, logger *logging.Logger) handlers.Handlers {
@@ -29,26 +31,29 @@ func NewHandler(service *Service, logger *logging.Logger) handlers.Handlers {
 	}
 }
 
-func (h *handler) RequestsHandler(w http.ResponseWriter, r *http.Request) {
+func (h *handler) ClientHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseGlob("./internal/html/*.html")
 	if err != nil {
 		h.logger.Tracef("%s - failed open RequestsHandler", config.LOG_ERROR)
-		w.WriteHeader(http.StatusNotFound)
+		http.NotFound(w, r)
 	}
 
-	data := map[string]interface{}{}
-	header := map[string]string{"Title": "ЭДМ - Заявки"}
+	clients, err := h.service.GetClients(context.TODO())
+	if err != nil {
+		fmt.Println("Errro", err)
+	}
 
-	err = tmpl.ExecuteTemplate(w, "header", header)
+	title := map[string]interface{}{"Title": "ЭДО - Клиенты"}
+	data := map[string]interface{}{"Clients": clients}
+
+	err = tmpl.ExecuteTemplate(w, "header", title)
 	if err != nil {
 		h.logger.Tracef("%s - failed open RequestsHandler", config.LOG_ERROR)
-		w.WriteHeader(http.StatusNotFound)
+		http.NotFound(w, r)
 	}
-
-	err = tmpl.ExecuteTemplate(w, "request", data)
+	err = tmpl.ExecuteTemplate(w, "client", data)
 	if err != nil {
 		h.logger.Tracef("%s - failed open RequestsHandler", config.LOG_ERROR)
-		w.WriteHeader(http.StatusNotFound)
+		http.NotFound(w, r)
 	}
-
 }

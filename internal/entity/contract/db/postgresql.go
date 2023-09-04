@@ -1,0 +1,128 @@
+package contract_db
+
+import (
+	"context"
+
+	"github.com/alexPavlikov/electronic_document_management/internal/entity/contract"
+	dbClient "github.com/alexPavlikov/electronic_document_management/pkg/client/postgresql"
+	"github.com/alexPavlikov/electronic_document_management/pkg/logging"
+	"github.com/alexPavlikov/electronic_document_management/pkg/utils"
+)
+
+type repository struct {
+	client dbClient.Client
+	logger logging.Logger
+}
+
+func NewRepository(client dbClient.Client, logger *logging.Logger) contract.Repository {
+	return &repository{
+		client: client,
+		logger: *logger,
+	}
+}
+
+func (r *repository) InsertContract(ctx context.Context, contract *contract.Contract) error {
+	query := `
+	INSERT INTO public."Contract" 
+		(name, client, start_date, end_date, amount, file, status)
+	VALUES 
+		($1, $2, $3, $4, $5, $6, $7)
+	RETURNIMG id
+	`
+
+	r.logger.Tracef("Query - %s", utils.FormatQuery(query))
+
+	rows := r.client.QueryRow(ctx, query, &contract.Name, &contract.Client, &contract.DataStart, &contract.DataEnd, &contract.Amount, &contract.File, &contract.Status)
+
+	err := rows.Scan(contract.Id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *repository) SelectContract(ctx context.Context, id int) (contract contract.Contract, err error) {
+	query := `
+	SELECT 
+		id, name, client, start_date, end_date, amount, file, status
+	FROM 
+		public."Contract"
+	WHERE 
+		id = $1
+	`
+
+	r.logger.Tracef("Query - %s", utils.FormatQuery(query))
+
+	rows, err := r.client.Query(ctx, query, id)
+	if err != nil {
+		return contract, err
+	}
+	err = rows.Scan(&contract.Id, &contract.Name, &contract.Client, &contract.DataStart, &contract.DataEnd, &contract.Amount, &contract.File, &contract.Status)
+	if err != nil {
+		return contract, err
+	}
+	return contract, nil
+}
+
+func (r *repository) SelectContracts(ctx context.Context) (contracts []contract.Contract, err error) {
+	query := `
+	SELECT 
+		id, name, client, start_date, end_date, amount, file, status
+	FROM 
+		public."Contract"
+	`
+
+	r.logger.Tracef("Query - %s", utils.FormatQuery(query))
+
+	rows, err := r.client.Query(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	var contract contract.Contract
+	for rows.Next() {
+		err = rows.Scan(&contract.Id, &contract.Name, &contract.Client, &contract.DataStart, &contract.DataEnd, &contract.Amount, &contract.File, &contract.Status)
+		if err != nil {
+			return nil, err
+		}
+		contracts = append(contracts, contract)
+	}
+	return contracts, nil
+}
+
+func (r *repository) UpdateContract(ctx context.Context, contract *contract.Contract) error {
+	query := `
+	UPDATE 
+		public."Contract"
+	SET 
+		name = $1, client = $2, start_date = $3, end_date = $4, amount = $5, file = $6, status = $7
+	WHERE 
+		id = $8
+	`
+
+	r.logger.Tracef("Query - %s", utils.FormatQuery(query))
+
+	_, err := r.client.Query(ctx, query, &contract.Name, &contract.Client, &contract.DataStart, &contract.DataEnd, &contract.Amount, &contract.File, &contract.Status, &contract.Id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *repository) CloseContract(ctx context.Context, id int) error {
+	query := `
+	UPDATE 
+		public."Contract"
+	SET 
+		status = "false"
+	WHERE 
+		id = $1
+	`
+
+	r.logger.Tracef("Query - %s", utils.FormatQuery(query))
+
+	_, err := r.client.Query(ctx, query, id)
+	if err != nil {
+		return err
+	}
+	return nil
+}

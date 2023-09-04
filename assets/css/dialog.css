@@ -60,15 +60,7 @@ dialog {
     flex-direction: column;
   }
 
-
-  dialog .content .content-col .title input {
-    width: 50%;
-    font-size: 18px;
-    padding: 5px 10px;
-    margin-bottom: 20px;
-  }
-
-  dialog .add {
+  dialog .adds {
     position: absolute;
     left: 60px;
     bottom: 20px;
@@ -91,6 +83,13 @@ dialog {
 
   dialog .content .content-col .class .type select {
     width: 95%;
+    font-size: 18px;
+    padding: 5px 10px;
+    
+  }
+
+  dialog .content .content-col .title select {
+    width: 100%;
     font-size: 18px;
     padding: 5px 10px;
     

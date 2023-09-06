@@ -15,3 +15,8 @@ type Request struct {
 	Contract     interface{}
 	Status       interface{}
 }
+
+type ReqStatus struct {
+	Name  string
+	Color string
+}

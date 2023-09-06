@@ -2,6 +2,7 @@ package requests
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"text/template"
 
@@ -37,6 +38,8 @@ func (h *handler) RequestsHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 	}
 
+	fmt.Println(ClientsDTO)
+
 	reqs, err := h.service.GetRequests(context.TODO())
 	if err != nil {
 		h.logger.Errorf("%s - failed load RequestsHandler due to err: %s", config.LOG_ERROR, err)
@@ -49,13 +52,14 @@ func (h *handler) RequestsHandler(w http.ResponseWriter, r *http.Request) {
 	err = tmpl.ExecuteTemplate(w, "header", header)
 	if err != nil {
 		h.logger.Tracef("%s - failed open RequestsHandler", config.LOG_ERROR)
-		http.NotFound(w, r)
+		// http.NotFound(w, r)
 	}
 
 	err = tmpl.ExecuteTemplate(w, "request", data)
 	if err != nil {
 		h.logger.Tracef("%s - failed open RequestsHandler", config.LOG_ERROR)
-		w.WriteHeader(http.StatusNotFound)
+		fmt.Println(err)
+		http.NotFound(w, r)
 	}
 
 }

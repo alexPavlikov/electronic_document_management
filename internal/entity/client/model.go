@@ -13,3 +13,11 @@ type Client struct {
 	CreateDate string
 	Status     bool
 }
+
+type ClientObject struct {
+	Id        int
+	Equipment int
+	Client    int
+	Object    int
+	Contract  int
+}

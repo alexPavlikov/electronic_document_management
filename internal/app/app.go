@@ -18,6 +18,8 @@ import (
 	object_db "github.com/alexPavlikov/electronic_document_management/internal/entity/objects/db"
 	"github.com/alexPavlikov/electronic_document_management/internal/entity/requests"
 	requests_db "github.com/alexPavlikov/electronic_document_management/internal/entity/requests/db"
+	"github.com/alexPavlikov/electronic_document_management/internal/entity/user"
+	user_db "github.com/alexPavlikov/electronic_document_management/internal/entity/user/db"
 	dbClient "github.com/alexPavlikov/electronic_document_management/pkg/client/postgresql"
 	"github.com/alexPavlikov/electronic_document_management/pkg/logging"
 
@@ -52,20 +54,53 @@ func Run() {
 	cHan := client.NewHandler(cSer, logger)
 	cHan.Register(router)
 
+	logger.Info(config.LOG_INFO, " - Start contract handlers")
 	ctRep := contract_db.NewRepository(ClientPostgreSQL, logger)
 	ctSer := contract.NewService(ctRep, logger)
 	ctHan := contract.NewHandler(ctSer, logger)
 	ctHan.Register(router)
 
+	logger.Info(config.LOG_INFO, " - Start object handlers")
 	oRep := object_db.NewRepository(ClientPostgreSQL, logger)
 	oSer := object.NewService(oRep, logger)
 	oHan := object.NewHandler(oSer, logger)
 	oHan.Register(router)
 
+	logger.Info(config.LOG_INFO, " - Start equipment handlers")
 	eRep := equipment_db.NewRepository(ClientPostgreSQL, logger)
 	eSer := equipment.NewService(eRep, logger)
 	eHan := equipment.NewHandler(eSer, logger)
 	eHan.Register(router)
+
+	logger.Info(config.LOG_INFO, " - Start user handlers")
+	uRep := user_db.NewRepository(ClientPostgreSQL, logger)
+	uSer := user.NewService(uRep, logger)
+	uHan := user.NewHandler(uSer, logger)
+	uHan.Register(router)
+
+	requests.ClientsDTO, err = cSer.GetClients(context.TODO())
+	if err != nil {
+		logger.Fatalf("%s - %s", config.LOG_ERROR, err)
+	}
+
+	//requests.ClientObjectDTO
+
+	requests.ContractsDTO, err = ctSer.GetContracts(context.TODO())
+	if err != nil {
+		logger.Fatalf("%s - %s", config.LOG_ERROR, err)
+	}
+
+	requests.EquipmentDTO, err = eSer.GetEquipments(context.TODO())
+	if err != nil {
+		logger.Fatalf("%s - %s", config.LOG_ERROR, err)
+	}
+
+	// requests.WorkerDTO, err = uSer.GetUsers(context.TODO())
+	// if err != nil {
+	// 	logger.Fatalf("%s - %s", config.LOG_ERROR, err)
+	// }
+
+	//requests.StatusDTO
 
 	start(router, *cfg)
 }

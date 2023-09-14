@@ -1,5 +1,12 @@
 package requests
 
+import (
+	"github.com/alexPavlikov/electronic_document_management/internal/entity/client"
+	"github.com/alexPavlikov/electronic_document_management/internal/entity/contract"
+	"github.com/alexPavlikov/electronic_document_management/internal/entity/equipment"
+	"github.com/alexPavlikov/electronic_document_management/internal/entity/user"
+)
+
 type Request struct {
 	Id           int
 	Title        string
@@ -8,12 +15,12 @@ type Request struct {
 	StartDate    string
 	EndDate      string
 	Files        []string
-	Client       interface{}
-	Worker       interface{}
-	ClientObject interface{}
-	Equipment    interface{}
-	Contract     interface{}
-	Status       interface{}
+	Client       client.Client
+	Worker       user.User
+	ClientObject client.ClientObject
+	Equipment    equipment.Equipment
+	Contract     contract.Contract
+	Status       ReqStatus
 }
 
 type ReqStatus struct {

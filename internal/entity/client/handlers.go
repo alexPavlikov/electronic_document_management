@@ -19,7 +19,7 @@ type handler struct {
 
 func (h *handler) Register(router *httprouter.Router) {
 
-	router.ServeFiles("/assets/*filepath", http.Dir("assets"))
+	//router.ServeFiles("/assets/*filepath", http.Dir("assets"))
 
 	router.HandlerFunc(http.MethodGet, "/edm/client", h.ClientHandler)
 }

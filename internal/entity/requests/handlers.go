@@ -19,7 +19,7 @@ type handler struct {
 
 func (h *handler) Register(router *httprouter.Router) {
 
-	//router.ServeFiles("/assets/*filepath", http.Dir("assets"))
+	router.ServeFiles("/assets/*filepath", http.Dir("assets"))
 
 	router.HandlerFunc(http.MethodGet, "/edm/request", h.RequestsHandler)
 }
@@ -34,11 +34,10 @@ func NewHandler(service *Service, logger *logging.Logger) handlers.Handlers {
 func (h *handler) RequestsHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseGlob("./internal/html/*.html")
 	if err != nil {
+		fmt.Println(err)
 		h.logger.Tracef("%s - failed open RequestsHandler", config.LOG_ERROR)
 		w.WriteHeader(http.StatusNotFound)
 	}
-
-	fmt.Println(ClientsDTO)
 
 	reqs, err := h.service.GetRequests(context.TODO())
 	if err != nil {
@@ -51,8 +50,9 @@ func (h *handler) RequestsHandler(w http.ResponseWriter, r *http.Request) {
 
 	err = tmpl.ExecuteTemplate(w, "header", header)
 	if err != nil {
+		fmt.Println()
 		h.logger.Tracef("%s - failed open RequestsHandler", config.LOG_ERROR)
-		// http.NotFound(w, r)
+		http.NotFound(w, r)
 	}
 
 	err = tmpl.ExecuteTemplate(w, "request", data)

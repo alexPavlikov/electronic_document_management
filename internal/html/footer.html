@@ -2,6 +2,25 @@
 
 <script src="../../assets/js/script.js"></script>
     
+<!-- <script>
+
+    $(document).ready(function(){
+                $('.click').click(function(e) {
+                    clickId = $(this).attr('id');
+                        $.ajax({
+                            url: '/edm/request',
+                            type: 'POST',
+                            dataType: 'html',
+                            data : { req_id: clickId},
+                            success : function(data) {
+                            $('#result').html(data);
+                            },
+                        });
+                });
+            });
+
+</script> -->
+
 </body>
 </html>
 {{ end }}

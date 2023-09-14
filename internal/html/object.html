@@ -28,7 +28,7 @@
         </thead>
         <tbody>
             <tr>
-                <td>1</td>
+                <td style="text-align: center;">1</td>
                 <td>Hello</td>
                 <td>адресс</td>
                 <td>12:00</td>
@@ -37,11 +37,11 @@
             </tr>
             {{ range $_, $o := .Objs }}
             <tr>
-                <td>{{ $o.Id }}</td>
+                <td style="text-align: center;">{{ $o.Id }}</td>
                 <td>{{ $o.Name }}</td>
                 <td>{{ $o.Address }}</td>
                 <td>{{ $o.WorkSchedule }}</td>
-                <td>{{ $o.Client }}</td>
+                <td>{{ $o.Client.Id }} - {{ $o.Client.Name }}</td>
                 <td class="edit"><button><i class="fa-solid fa-pen-to-square"></i></button></td>
             </tr>
             {{ end }}

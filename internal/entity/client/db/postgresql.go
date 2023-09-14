@@ -2,6 +2,7 @@ package client_db
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/alexPavlikov/electronic_document_management/internal/entity/client"
 	dbClient "github.com/alexPavlikov/electronic_document_management/pkg/client/postgresql"
@@ -41,6 +42,8 @@ func (r *repository) InsertClient(ctx context.Context, clnt *client.Client) erro
 	if err != nil {
 		return err
 	}
+
+	r.logger.LogEvents("Добавлен", fmt.Sprintf("%s c id=:%d", "клиент", &clnt.Id))
 
 	return nil
 }
@@ -110,6 +113,9 @@ func (r *repository) UpdateClient(ctx context.Context, cl *client.Client) error 
 	if err != nil {
 		return err
 	}
+
+	r.logger.LogEvents("Обновлен", fmt.Sprintf("%s c id=:%d", "клиент", &cl.Id))
+
 	return nil
 }
 
@@ -128,5 +134,8 @@ func (r *repository) DeleteClient(ctx context.Context, id int) error {
 	if err != nil {
 		return err
 	}
+
+	r.logger.LogEvents("Удален", fmt.Sprintf("%s c id=:%d", "клиент", id))
+
 	return nil
 }

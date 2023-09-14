@@ -49,6 +49,21 @@ func (l *Logger) GetLoggerWithField(k string, v interface{}) *Logger {
 	}
 }
 
+func (l *Logger) LogEvents(key string, text string) error {
+	file, err := os.OpenFile("logs/events.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0640)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	res := fmt.Sprintf("%s - %s", key, text)
+
+	_, err = file.Write([]byte(res))
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func init() {
 	l := logrus.New()
 	l.SetReportCaller(true)

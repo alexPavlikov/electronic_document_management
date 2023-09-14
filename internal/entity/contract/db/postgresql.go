@@ -2,6 +2,7 @@ package contract_db
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/alexPavlikov/electronic_document_management/internal/entity/contract"
 	dbClient "github.com/alexPavlikov/electronic_document_management/pkg/client/postgresql"
@@ -38,6 +39,9 @@ func (r *repository) InsertContract(ctx context.Context, contract *contract.Cont
 	if err != nil {
 		return err
 	}
+
+	r.logger.LogEvents("Добавлен", fmt.Sprintf("%s c id=:%d", "контракт", &contract.Id))
+
 	return nil
 }
 
@@ -105,6 +109,9 @@ func (r *repository) UpdateContract(ctx context.Context, contract *contract.Cont
 	if err != nil {
 		return err
 	}
+
+	r.logger.LogEvents("Изменен", fmt.Sprintf("%s c id=:%d", "контракт", &contract.Id))
+
 	return nil
 }
 
@@ -124,5 +131,8 @@ func (r *repository) CloseContract(ctx context.Context, id int) error {
 	if err != nil {
 		return err
 	}
+
+	r.logger.LogEvents("Закрыт", fmt.Sprintf("%s c id=:%d", "контракт", id))
+
 	return nil
 }

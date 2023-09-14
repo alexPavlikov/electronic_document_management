@@ -2,6 +2,7 @@ package services_db
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/alexPavlikov/electronic_document_management/internal/entity/services"
 	dbClient "github.com/alexPavlikov/electronic_document_management/pkg/client/postgresql"
@@ -38,6 +39,9 @@ func (r *repository) InsertServices(ctx context.Context, sr *services.Services) 
 	if err != nil {
 		return err
 	}
+
+	r.logger.LogEvents("Добавлена", fmt.Sprintf("%s c id=:%d", "услуга", &sr.Id))
+
 	return nil
 }
 
@@ -64,6 +68,7 @@ func (r *repository) SelectServices(ctx context.Context) (srvs []services.Servic
 			return nil, err
 		}
 		srvs = append(srvs, src)
+		fmt.Println(srvs)
 	}
 	return srvs, nil
 }
@@ -108,6 +113,9 @@ func (r *repository) UpdateServices(ctx context.Context, srv *services.Services)
 	if err != nil {
 		return err
 	}
+
+	r.logger.LogEvents("Изменена", fmt.Sprintf("%s c id=:%d", "услуга", &srv.Id))
+
 	return nil
 }
 
@@ -125,5 +133,8 @@ func (r *repository) DeleteServices(ctx context.Context, id int) error {
 	if err != nil {
 		return err
 	}
+
+	r.logger.LogEvents("Удалена", fmt.Sprintf("%s c id=:%d", "услуга", id))
+
 	return nil
 }

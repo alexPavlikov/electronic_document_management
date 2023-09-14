@@ -40,6 +40,19 @@
                 <td class="edit"><button><i class="fa-solid fa-pen-to-square"></i></button></td>
             </tr>
 
+            {{ range $_, $us := .User }}
+
+            <tr>
+                <td style="text-align: center;">{{ $us.Id }}</td>
+                <td>{{ $us.Email }}</td>
+                <td>{{ $us.FullName }}</td>
+                <td>{{ $us.Phone }}</td>
+                <td>{{ $us.Image }}</td>
+                <td>{{ $us.Role }}</td>
+                <td class="edit"><button><i class="fa-solid fa-pen-to-square"></i></button></td>
+            </tr>
+
+            {{ end }}
         
         </tbody>
     </table>

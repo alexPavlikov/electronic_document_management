@@ -1,6 +1,8 @@
 package user
 
 import (
+	"context"
+	"fmt"
 	"net/http"
 	"text/template"
 
@@ -32,21 +34,24 @@ func (h *handler) UserHandler(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 	}
 
-	// users, err := h.service.GetUsers(context.TODO())
-	// if err != nil {
-	// 	http.NotFound(w, r)
-	// }
+	users, err := h.service.GetUsers(context.TODO())
+	if err != nil {
+		http.NotFound(w, r)
+	}
+
+	fmt.Println(users)
 
 	title := map[string]string{"Title": "ЭДО - Пользователи"}
-	//data := map[string]interface{}{"User": users}
+	data := map[string]interface{}{"User": users}
 
 	err = tmpl.ExecuteTemplate(w, "header", title)
 	if err != nil {
 		http.NotFound(w, r)
 	}
 
-	err = tmpl.ExecuteTemplate(w, "user", nil)
+	err = tmpl.ExecuteTemplate(w, "user", data)
 	if err != nil {
+		fmt.Println(err)
 		http.NotFound(w, r)
 	}
 }

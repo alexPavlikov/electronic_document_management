@@ -2,6 +2,7 @@ package equipment_db
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/alexPavlikov/electronic_document_management/internal/entity/equipment"
 	dbClient "github.com/alexPavlikov/electronic_document_management/pkg/client/postgresql"
@@ -37,6 +38,9 @@ func (r *repository) InsertEquipment(ctx context.Context, eq *equipment.Equipmen
 	if err != nil {
 		return err
 	}
+
+	r.logger.LogEvents("Добавлено", fmt.Sprintf("%s c id=:%d", "оборудование", &eq.Id))
+
 	return nil
 }
 
@@ -108,6 +112,9 @@ func (r *repository) UpdateEquipment(ctx context.Context, eq *equipment.Equipmen
 	if err != nil {
 		return err
 	}
+
+	r.logger.LogEvents("Обновлено", fmt.Sprintf("%s c id=:%d", "оборудование", &eq.Id))
+
 	return nil
 }
 
@@ -125,5 +132,8 @@ func (r *repository) DeleteEquipment(ctx context.Context, id int) error {
 	if err != nil {
 		return err
 	}
+
+	r.logger.LogEvents("Удалено", fmt.Sprintf("%s c id=:%d", "оборудование", id))
+
 	return nil
 }

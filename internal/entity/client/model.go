@@ -1,5 +1,7 @@
 package client
 
+import "github.com/alexPavlikov/electronic_document_management/internal/entity/objects"
+
 type Client struct {
 	Id         int
 	Name       string
@@ -15,9 +17,7 @@ type Client struct {
 }
 
 type ClientObject struct {
-	Id        int
-	Equipment int
-	Client    int
-	Object    int
-	Contract  int
+	Id     int
+	Client Client
+	Object objects.Object
 }

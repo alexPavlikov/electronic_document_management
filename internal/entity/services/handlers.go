@@ -1,7 +1,6 @@
 package services
 
 import (
-	"context"
 	"net/http"
 	"text/template"
 
@@ -19,7 +18,7 @@ func (h *handler) Register(router *httprouter.Router) {
 
 	//router.ServeFiles("/assets/*filepath", http.Dir("assets"))
 
-	router.HandlerFunc(http.MethodGet, "/edm/services", h.ServicesHandler)
+	router.HandlerFunc(http.MethodGet, "/edm/service", h.ServicesHandler)
 }
 
 func NewHandler(service *Service, logger *logging.Logger) handlers.Handlers {
@@ -35,20 +34,20 @@ func (h *handler) ServicesHandler(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 	}
 
-	services, err := h.service.GetServices(context.TODO())
-	if err != nil {
-		http.NotFound(w, r)
-	}
+	// services, err := h.service.GetServices(context.TODO())
+	// if err != nil {
+	// 	http.NotFound(w, r)
+	// }
 
 	title := map[string]string{"Title": "ЭДО - Услуги"}
-	data := map[string]interface{}{"Services": services}
+	//data := map[string]interface{}{"Services": services}
 
 	err = tmpl.ExecuteTemplate(w, "header", title)
 	if err != nil {
 		http.NotFound(w, r)
 	}
 
-	err = tmpl.ExecuteTemplate(w, "services", data)
+	err = tmpl.ExecuteTemplate(w, "service", nil)
 	if err != nil {
 		http.NotFound(w, r)
 	}

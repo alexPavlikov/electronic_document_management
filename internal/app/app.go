@@ -14,10 +14,12 @@ import (
 	contract_db "github.com/alexPavlikov/electronic_document_management/internal/entity/contract/db"
 	"github.com/alexPavlikov/electronic_document_management/internal/entity/equipment"
 	equipment_db "github.com/alexPavlikov/electronic_document_management/internal/entity/equipment/db"
-	object "github.com/alexPavlikov/electronic_document_management/internal/entity/objects"
-	object_db "github.com/alexPavlikov/electronic_document_management/internal/entity/objects/db"
+	"github.com/alexPavlikov/electronic_document_management/internal/entity/objects"
+	objects_db "github.com/alexPavlikov/electronic_document_management/internal/entity/objects/db"
 	"github.com/alexPavlikov/electronic_document_management/internal/entity/requests"
 	requests_db "github.com/alexPavlikov/electronic_document_management/internal/entity/requests/db"
+	"github.com/alexPavlikov/electronic_document_management/internal/entity/services"
+	services_db "github.com/alexPavlikov/electronic_document_management/internal/entity/services/db"
 	"github.com/alexPavlikov/electronic_document_management/internal/entity/user"
 	user_db "github.com/alexPavlikov/electronic_document_management/internal/entity/user/db"
 	dbClient "github.com/alexPavlikov/electronic_document_management/pkg/client/postgresql"
@@ -61,9 +63,9 @@ func Run() {
 	ctHan.Register(router)
 
 	logger.Info(config.LOG_INFO, " - Start object handlers")
-	oRep := object_db.NewRepository(ClientPostgreSQL, logger)
-	oSer := object.NewService(oRep, logger)
-	oHan := object.NewHandler(oSer, logger)
+	oRep := objects_db.NewRepository(ClientPostgreSQL, logger)
+	oSer := objects.NewService(oRep, logger)
+	oHan := objects.NewHandler(oSer, logger)
 	oHan.Register(router)
 
 	logger.Info(config.LOG_INFO, " - Start equipment handlers")
@@ -77,6 +79,12 @@ func Run() {
 	uSer := user.NewService(uRep, logger)
 	uHan := user.NewHandler(uSer, logger)
 	uHan.Register(router)
+
+	sRep := services_db.NewRepository(ClientPostgreSQL, logger)
+	sSer := services.NewService(sRep, logger)
+	sHan := services.NewHandler(sSer, logger)
+
+	sHan.Register(router)
 
 	requests.ClientsDTO, err = cSer.GetClients(context.TODO())
 	if err != nil {
@@ -95,10 +103,10 @@ func Run() {
 		logger.Fatalf("%s - %s", config.LOG_ERROR, err)
 	}
 
-	// requests.WorkerDTO, err = uSer.GetUsers(context.TODO())
-	// if err != nil {
-	// 	logger.Fatalf("%s - %s", config.LOG_ERROR, err)
-	// }
+	requests.WorkerDTO, err = uSer.GetUsers(context.TODO())
+	if err != nil {
+		logger.Fatalf("%s - %s", config.LOG_ERROR, err)
+	}
 
 	//requests.StatusDTO
 
@@ -127,6 +135,7 @@ func start(r *httprouter.Router, cfg config.Config) {
 
 	err := server.Serve(listener)
 	if err != nil {
+		fmt.Println("ERRRRRRRRRRRRRRROR - ", err)
 		logger.Fatal(config.LOG_ERROR, err.Error())
 	}
 
